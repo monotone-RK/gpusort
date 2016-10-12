@@ -1,0 +1,11 @@
+Copyright (c) 2016 Tokyo Institute of Technology
+Released under the MIT license
+http://opensource.org/licenses/mit-license.php
+
+include/helpers/hyksort_helper.h and include/omp/omp_utils.h is refactored below algorithm 'HykSort'
+
+Hari Sundar, Dhairya Malhotra and George Biros.HykSort: A New Variant of Hypercube Quicksort on Distributed Memory Architectures
+http://www.cs.utah.edu/~hari/files/pubs/ics13.pdf
+
+authors of original hyksort_helper.h:
+Rahul S. Sampath, rahul.sampath@gmail.com, hsundar@gmail.com, shravan@seas.upenn.edu, santis@gmail.com

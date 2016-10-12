@@ -1,0 +1,55 @@
+#!/bin/bash
+source config.sh
+cd $bin_test_dir
+$RM
+gpu=true
+file_name=`basename $0`
+name_of_algorithm="hyk_sort"
+number_node=8
+process_per_node=2
+data_per_process=512
+data_size=$[number_node * process_per_node * data_per_process]
+foo=$[n_cores / process_per_node]
+
+echo "****************Running file $file_name*********************" >> $stdout_file
+echo "************************************************************" >> $stdout_file
+echo ""  >> $stdout_file
+while getopts "a:g:" opt; do
+  case $opt in
+    g)
+      gpu=$OPTARG >&2
+      ;;
+    a)
+      name_of_algorithm=$OPTARG >&2
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      ;;
+  esac
+done
+
+./test_arithmetic_progression -c 3 -d -e .txt -f 2 -t long 16 $data_size$type_size $gen_data_dir 1>> $stdout_file 2>> $error_file
+
+host=${list_hosts[0]}
+for i in {1..7}
+do
+  host="$host,${list_hosts[i]}"
+done
+
+mpirun -np 16 $host_tag $host ./test_arithmetic_progression -a $name_of_algorithm -n $foo -c 3 -e .txt -f 2 -g false -k 16 -t long $gen_data_dir 1>> $stdout_file 2>> $error_file
+
+result=$?
+
+if [ $result == 0 ]
+then
+  notification="$file_name 's success"
+  echo $notification >> $result_file
+  exit 0
+else
+  notification="$file_name 's failure"
+  echo $notification >> $result_file
+    echo "******************Finished $file_name*********************" >> $error_file
+  echo "***********************************************************" >> $error_file
+
+  exit 1
+fi
